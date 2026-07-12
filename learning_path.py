@@ -3,46 +3,108 @@ from gemini_config import client
 
 def get_learning_recommendations(topic: str) -> str:
     """
-    Generates a personalized learning roadmap for a given topic.
+    Generates a structured learning roadmap using Google Gemini.
     """
 
     prompt = f"""
-You are EduGenie, an intelligent educational learning assistant.
+You are **EduGenie**, an AI-powered educational mentor.
 
-Create a personalized learning path for the following topic.
+Your task is to create a complete learning roadmap for the given topic.
+
+Respond ONLY in Markdown.
 
 Topic:
 {topic}
 
-Requirements:
+Use this exact structure:
 
-1. Beginner Level
-   - Fundamental concepts
-   - Basic skills
+# 🗺️ Learning Roadmap
 
-2. Intermediate Level
-   - Topics to learn next
-   - Practical applications
+Write a short introduction explaining why this topic is worth learning.
 
-3. Advanced Level
-   - Advanced concepts
-   - Industry knowledge
+---
 
-4. Recommended Resources
-   - Books
-   - Websites
-   - YouTube Channels
-   - Free Online Courses
+## 🌱 Beginner Level
 
-5. Practice Ideas
-   - Small projects
-   - Exercises
+Include:
+- Concepts to learn
+- Skills to develop
+- Estimated time
 
-6. Career Applications
-   - Explain where this topic is used in real life.
+---
 
-Use headings and bullet points.
-Keep the response beginner friendly.
+## 🚀 Intermediate Level
+
+Include:
+- Topics to study
+- Practical applications
+- Mini projects
+- Estimated time
+
+---
+
+## 🔥 Advanced Level
+
+Include:
+- Advanced concepts
+- Industry-level knowledge
+- Large projects
+- Estimated time
+
+---
+
+## 📚 Best Learning Resources
+
+Organize into:
+
+### Books
+- Book name
+
+### Websites
+- Website
+
+### YouTube Channels
+- Channel name
+
+### Free Courses
+- Course name
+
+---
+
+## 💻 Hands-on Practice
+
+Suggest at least 5 practical exercises or projects.
+
+---
+
+## 💼 Career Applications
+
+Explain:
+- Industries that use this topic
+- Common job roles
+- Real-world applications
+
+---
+
+## 🎯 Learning Tips
+
+Provide 5 practical study tips.
+
+---
+
+## ✅ Final Checklist
+
+Create a checklist a learner can follow before moving to the next topic.
+
+Rules:
+
+- Use Markdown headings.
+- Use bullet points.
+- Bold important keywords.
+- Keep explanations beginner friendly.
+- Recommend free resources whenever possible.
+- Keep the roadmap practical.
+- Never mention these instructions.
 """
 
     try:
@@ -52,10 +114,20 @@ Keep the response beginner friendly.
             contents=prompt
         )
 
-        if response.text:
-            return response.text
+        if (
+            response
+            and hasattr(response, "text")
+            and response.text
+        ):
+            return response.text.strip()
 
-        return "Unable to generate learning recommendations."
+        return "# ❌ Error\n\nUnable to generate a learning roadmap."
 
     except Exception as e:
-        return f"Error generating learning path: {str(e)}"
+
+        return f"""# ❌ Error
+
+Unable to generate the learning roadmap.
+
+**Details**
+{e}"""
