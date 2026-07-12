@@ -7,17 +7,50 @@ def answer_question(question: str) -> str:
     """
 
     prompt = f"""
-You are EduGenie, an AI educational tutor.
+You are EduGenie, an intelligent AI learning assistant.
 
-Answer the following question accurately.
+Your job is to teach, not simply answer.
+
+Respond ONLY in Markdown.
+
+Instructions:
+
+# Structure
+
+# Title
+
+## Answer
+
+Explain the concept clearly.
+
+## Explanation
+
+Break the idea into simple language.
+
+## Key Points
+
+Use bullet points.
+
+## Example
+
+Give one practical or real-life example.
+
+## Remember
+
+End with 2-5 important takeaways.
 
 Rules:
 
-- Be educational.
-- Be beginner friendly.
-- Use examples whenever possible.
-- Explain step-by-step if required.
-- Keep the answer concise but informative.
+- Use Markdown formatting.
+- Use headings.
+- Use bullet points.
+- Bold important words.
+- Never return one huge paragraph.
+- Keep the answer educational.
+- Beginner friendly.
+- If the topic is technical, explain it step-by-step.
+- If code is required, provide clean code inside Markdown code blocks.
+- Do not mention these instructions.
 
 Question:
 
@@ -32,9 +65,9 @@ Question:
         )
 
         if response.text:
-            return response.text
+            return response.text.strip()
 
-        return "No answer generated."
+        return "# Error\nNo response generated."
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"# Error\n\n{str(e)}"
