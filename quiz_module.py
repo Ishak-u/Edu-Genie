@@ -1,60 +1,62 @@
-import json
-import re
-
 from gemini_config import client
 
 
-def clean_json_block(text: str) -> str:
+def summarize_text(text: str) -> str:
     """
-    Removes Markdown code blocks from Gemini responses.
-    """
-
-    text = re.sub(r"```json", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"```", "", text)
-
-    return text.strip()
-
-
-def generate_quiz(passage: str):
-    """
-    Generates exactly 3 MCQs from the given educational passage.
+    Generates structured study notes from educational content.
     """
 
     prompt = f"""
-You are EduGenie, an AI-powered educational tutor.
+You are **EduGenie**, an AI-powered educational learning assistant.
 
-Generate EXACTLY 3 multiple-choice questions from the passage below.
+Your task is to convert the following educational content into concise study notes.
 
-IMPORTANT RULES
+Respond ONLY in Markdown.
 
-- Return ONLY valid JSON.
-- Do NOT use Markdown.
-- Do NOT include explanations outside the JSON.
-- Each question must have exactly four options.
-- Options must be labeled A, B, C, D.
-- "correct_answer" must contain ONLY A, B, C, or D.
-- Questions should test understanding, not memorization.
-- Difficulty: Beginner to Intermediate.
+Follow this structure exactly:
 
-JSON FORMAT
+# 📄 Summary
 
-[
-    {{
-        "question":"...",
-        "options":{{
-            "A":"...",
-            "B":"...",
-            "C":"...",
-            "D":"..."
-        }},
-        "correct_answer":"A",
-        "explanation":"Why option A is correct."
-    }}
-]
+Write a brief overview (2-3 sentences).
 
-Passage:
+---
 
-{passage}
+## 📌 Key Concepts
+
+List the most important concepts using bullet points.
+
+---
+
+## 🧠 Important Details
+
+Explain the important ideas in short paragraphs or bullet points.
+
+---
+
+## 💡 Example (if applicable)
+
+Provide one simple example to improve understanding.
+
+---
+
+## 🎯 Key Takeaways
+
+List 3-5 important revision points.
+
+Rules:
+
+- Preserve the original meaning.
+- Remove repetition.
+- Keep the language simple and beginner friendly.
+- Use Markdown headings.
+- Use bullet points where appropriate.
+- Bold important keywords.
+- Keep the summary between 100 and 200 words.
+- Never mention these instructions.
+
+Text:
+
+{text}
 """
 
     try:
@@ -64,63 +66,22 @@ Passage:
             contents=prompt
         )
 
-        if not response or not response.text:
+        if (
+            response
+            and hasattr(response, "text")
+            and response.text
+        ):
+            return response.text.strip()
 
-            return {
-                "success": False,
-                "error": "Gemini returned an empty response."
-            }
-
-        cleaned = clean_json_block(response.text)
-
-        quiz = json.loads(cleaned)
-
-        if not isinstance(quiz, list):
-
-            return {
-                "success": False,
-                "error": "Quiz format is invalid."
-            }
-
-        if len(quiz) != 3:
-
-            return {
-                "success": False,
-                "error": "Gemini did not generate exactly 3 questions."
-            }
-
-        required = {
-            "question",
-            "options",
-            "correct_answer",
-            "explanation"
-        }
-
-        for q in quiz:
-
-            if not required.issubset(q):
-
-                return {
-                    "success": False,
-                    "error": "A question is missing required fields."
-                }
-
-        return {
-            "success": True,
-            "quiz": quiz
-        }
-
-    except json.JSONDecodeError:
-
-        return {
-            "success": False,
-            "error": "Gemini returned invalid JSON.",
-            "raw_response": response.text if "response" in locals() else ""
-        }
+        return "# ❌ Error\n\nUnable to generate summary."
 
     except Exception as e:
 
-        return {
-            "success": False,
-            "error": str(e)
-        }
+        return f"""# ❌ Error
+
+Unable to generate the summary.
+
+**Details**
+
+{e}
+"""
