@@ -18,37 +18,38 @@ def clean_json_block(text: str) -> str:
 def generate_quiz(passage: str):
     """
     Generates exactly 3 MCQs from the given educational passage.
-    Returns a Python list of dictionaries.
     """
 
     prompt = f"""
-You are EduGenie, an AI Educational Assistant.
+You are EduGenie, an AI-powered educational tutor.
 
-Read the passage carefully.
+Generate EXACTLY 3 multiple-choice questions from the passage below.
 
-Generate EXACTLY THREE multiple-choice questions.
-
-Rules:
+IMPORTANT RULES
 
 - Return ONLY valid JSON.
-- Do NOT write explanations.
 - Do NOT use Markdown.
-- Each question must contain exactly four options.
-- Include the correct answer.
+- Do NOT include explanations outside the JSON.
+- Each question must have exactly four options.
+- Options must be labeled A, B, C, D.
+- "correct_answer" must contain ONLY A, B, C, or D.
+- Questions should test understanding, not memorization.
+- Difficulty: Beginner to Intermediate.
 
-Return in this format:
+JSON FORMAT
 
 [
-  {{
-    "question": "...",
-    "options": {{
-      "A": "...",
-      "B": "...",
-      "C": "...",
-      "D": "..."
-    }},
-    "correct_answer": "A"
-  }}
+    {{
+        "question":"...",
+        "options":{{
+            "A":"...",
+            "B":"...",
+            "C":"...",
+            "D":"..."
+        }},
+        "correct_answer":"A",
+        "explanation":"Why option A is correct."
+    }}
 ]
 
 Passage:
@@ -63,27 +64,57 @@ Passage:
             contents=prompt
         )
 
-        if not response.text:
+        if not response or not response.text:
+
             return {
                 "success": False,
-                "error": "Empty response received from Gemini."
+                "error": "Gemini returned an empty response."
             }
 
         cleaned = clean_json_block(response.text)
 
         quiz = json.loads(cleaned)
 
+        if not isinstance(quiz, list):
+
+            return {
+                "success": False,
+                "error": "Quiz format is invalid."
+            }
+
+        if len(quiz) != 3:
+
+            return {
+                "success": False,
+                "error": "Gemini did not generate exactly 3 questions."
+            }
+
+        required = {
+            "question",
+            "options",
+            "correct_answer",
+            "explanation"
+        }
+
+        for q in quiz:
+
+            if not required.issubset(q):
+
+                return {
+                    "success": False,
+                    "error": "A question is missing required fields."
+                }
+
         return {
             "success": True,
             "quiz": quiz
         }
 
-    except json.JSONDecodeError as e:
+    except json.JSONDecodeError:
 
         return {
             "success": False,
-            "error": "JSON Parsing Failed",
-            "details": str(e),
+            "error": "Gemini returned invalid JSON.",
             "raw_response": response.text if "response" in locals() else ""
         }
 
