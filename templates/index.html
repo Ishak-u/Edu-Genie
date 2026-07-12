@@ -1,56 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGenie Learning Assistant</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EduGenie AI</title>
 
     <link rel="stylesheet" href="/static/style.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 </head>
+
 <body>
+
+<div class="background"></div>
 
 <div class="container">
 
-    <h1>🎓 EduGenie</h1>
-    <p class="subtitle">AI Learning System Interface</p>
+    <!-- HEADER -->
 
-    <!-- GLOBAL INPUT -->
-    <div class="global-input card">
-        <textarea id="inputText" placeholder="Enter topic / question / passage..."></textarea>
-    </div>
-
-    <!-- MODULE GRID -->
-    <div class="grid">
-
-        <div class="module">
-            <button onclick="askQuestion()">❓ Ask</button>
-            <div id="qnaBox" class="outputBox"></div>
+    <header class="header">
+<div id="statusBadge" class="statusBadge">
+    🟢 Ready
+</div>
+        <div class="logo">
+            🎓
         </div>
 
-        <div class="module">
-            <button onclick="explain()">🧠 Explain</button>
-            <div id="explainBox" class="outputBox"></div>
+        <div>
+
+            <h1>EduGenie AI</h1>
+
+            <p>
+                Intelligent Educational Learning Assistant
+            </p>
+
         </div>
 
-        <div class="module">
-            <button onclick="summarize()">📌 Summarize</button>
-            <div id="summaryBox" class="outputBox"></div>
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero-card card">
+
+        <h2>Ask Anything</h2>
+
+        <p>
+
+            Enter your topic, paragraph, notes or question once.
+            Every AI module below can use the same input.
+
+        </p>
+
+        <textarea
+
+            id="inputText"
+
+            placeholder="Example: Explain Machine Learning in simple words..."
+
+        ></textarea>
+
+        <div class="counter">
+
+            <span id="charCount">
+
+                0 Characters
+
+            </span>
+
         </div>
 
-        <div class="module">
-            <button onclick="generateQuiz()">🧩 Quiz</button>
-            <div id="quizBox" class="outputBox"></div>
+    </section>
+
+
+
+    <!-- MODULES -->
+
+    <section class="modules">
+
+
+
+        <!-- QUESTION ANSWERING -->
+
+        <div class="module card">
+
+            <div class="module-header">
+
+                <div class="module-title">
+
+                    ❓ Question & Answer
+
+                </div>
+
+                <button onclick="askQuestion()">
+
+                    Generate
+
+                </button>
+
+            </div>
+
+            <div id="qnaBox" class="outputBox">
+
+                <div class="placeholder">
+
+                    💬
+
+                    Ask a question and your answer will appear here.
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="module">
-            <button onclick="learningPath()">🧭 Path</button>
-            <div id="pathBox" class="outputBox"></div>
+
+
+        <!-- EXPLANATION -->
+
+        <div class="module card">
+
+            <div class="module-header">
+
+                <div class="module-title">
+
+                    🧠 Explanation
+
+                </div>
+
+                <button onclick="explain()">
+
+                    Explain
+
+                </button>
+
+            </div>
+
+            <div id="explainBox" class="outputBox">
+
+                <div class="placeholder">
+
+                    📘
+
+                    A detailed explanation will appear here.
+
+                </div>
+
+            </div>
+
         </div>
 
-    </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="module card">
+
+            <div class="module-header">
+
+                <div class="module-title">
+
+                    📄 Summary
+
+                </div>
+
+                <button onclick="summarize()">
+
+                    Summarize
+
+                </button>
+
+            </div>
+
+            <div id="summaryBox" class="outputBox">
+
+                <div class="placeholder">
+
+                    📝
+
+                    Your concise summary will appear here.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUIZ -->
+
+        <div class="module card">
+
+            <div class="module-header">
+
+                <div class="module-title">
+
+                    🧩 Quiz Generator
+
+                </div>
+
+                <button onclick="generateQuiz()">
+
+                    Create Quiz
+
+                </button>
+
+            </div>
+
+            <div id="quizBox" class="outputBox">
+
+                <div class="placeholder">
+
+                    🎯
+
+                    Three interactive MCQs will appear here.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LEARNING PATH -->
+
+        <div class="module card">
+
+            <div class="module-header">
+
+                <div class="module-title">
+
+                    🧭 Learning Path
+
+                </div>
+
+                <button onclick="learningPath()">
+
+                    Build Roadmap
+
+                </button>
+
+            </div>
+
+            <div id="pathBox" class="outputBox">
+
+                <div class="placeholder">
+
+                    🚀
+
+                    Personalized learning roadmap appears here.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+<div class="toolbar">
+<button onclick="copyEntirePage()">
+    📋 Copy All
+</button>
+
+<button onclick="clearOutputs()">
+    🗑 Clear
+</button>
+
+<button onclick="scrollTopSmooth()">
+    ⬆ Top
+</button>
+</div>
+    <!-- FOOTER -->
+
+    <footer>
+
+        <span>
+
+            Powered by
+
+            <strong>Google Gemini 2.5 Flash</strong>
+
+        </span>
+
+    </footer>
 
 </div>
 
+<!-- Markdown Renderer -->
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<!-- Main Script -->
+
 <script src="/static/script.js"></script>
+
 </body>
+
 </html>
