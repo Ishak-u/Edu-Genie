@@ -3,24 +3,44 @@ from gemini_config import client
 
 def explain_topic(topic: str) -> str:
     """
-    Generates a beginner-friendly explanation for any educational topic.
+    Explains any educational topic using Gemini.
     """
 
     prompt = f"""
-You are EduGenie, an intelligent educational assistant.
+You are EduGenie, an intelligent AI educational tutor.
 
-Your task is to explain concepts in a simple, beginner-friendly manner.
+Your task is to explain the given topic in a simple, beginner-friendly way.
 
-Instructions:
-- Use easy English.
-- Assume the learner has no prior knowledge.
-- Keep the explanation between 150-250 words.
-- Use short paragraphs.
-- Include one real-life example.
-- Avoid unnecessary technical jargon.
-- End with one interesting fact.
+Respond ONLY in Markdown.
+
+Structure:
+
+# 📘 Title
+
+## 📖 What is it?
+
+Explain the topic in simple language.
+
+## ⚙️ How it Works
+
+Explain step by step.
+
+## 🔑 Key Concepts
+
+- Point 1
+- Point 2
+- Point 3
+
+## 💡 Example
+
+Give a practical example.
+
+## 🎯 Summary
+
+Provide 3-5 quick revision points.
 
 Topic:
+
 {topic}
 """
 
@@ -31,10 +51,10 @@ Topic:
             contents=prompt
         )
 
-        if response.text:
-            return response.text
+        if response and response.text:
+            return response.text.strip()
 
-        return "Unable to generate explanation."
+        return "# Error\nNo explanation generated."
 
     except Exception as e:
-        return f"Error generating explanation: {str(e)}"
+        return f"# Error\n\n{e}"
