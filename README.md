@@ -155,23 +155,6 @@ Planned improvements:
 
 ---
 
-# 📸 Screenshots
-
-(Add screenshots of your application here)
-
-Example:
-
-```
-screenshots/
-│
-├── home.png
-├── quiz.png
-├── summary.png
-└── explanation.png
-```
-
----
-
 # 📜 License
 
 This project is licensed under the MIT License.
