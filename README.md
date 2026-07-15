@@ -163,7 +163,9 @@ This project is licensed under the MIT License.
 
 # 👨‍💻 Author
 
-**Ishak**
+**Ishak Baba Shaik**
+**Roll No : 23MH1A05D0**
+**Email: skishakog@gamil.com**
 
 ---
 
@@ -172,5 +174,5 @@ This project is licensed under the MIT License.
 🚧 Active Development
 
 Edu-Genie is continuously improving with new AI-powered learning features.
-## demo video of project 
+## Demo video of project 
 google drive link - https://drive.google.com/file/d/1pOZ9qYBmV2lRoCzpdbSQWq35v0LgeU4p/view?usp=sharing
