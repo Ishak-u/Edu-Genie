@@ -173,5 +173,4 @@ This project is licensed under the MIT License.
 
 Edu-Genie is continuously improving with new AI-powered learning features.
 ## demo video of project 
-google drive link - https://drive.google.com/file/d/1pOZ9qYBmV2lRo
-CzpdbSQWq35v0LgeU4p/view?usp=sharing
+google drive link - https://drive.google.com/file/d/1pOZ9qYBmV2lRoCzpdbSQWq35v0LgeU4p/view?usp=sharing
