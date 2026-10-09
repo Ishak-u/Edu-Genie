@@ -1,178 +1,200 @@
-# 🎓 Edu-Genie - AI Learning Assistant
+# Edu-Genie — AI Learning Assistant & Agent Mesh
 
-Edu-Genie is an AI-powered learning assistant designed to make studying easier, faster, and more interactive.
+Edu-Genie is an AI-powered learning platform that helps students understand concepts, ask academic questions, generate quizzes, summarize study material, and discover personalized learning paths.
 
-The platform uses Google's Gemini API to provide intelligent explanations, answer academic questions, generate quizzes, summarize learning materials, and suggest personalized learning paths.
+The **Agent Mesh MVP** extends the existing application with a tool-using AI agent built using LangGraph, FastMCP, Google Gemini, and SQLite. The agent can retrieve saved study notes, generate quizzes, and retrieve learning-progress records through MCP tools.
 
-Edu-Genie transforms AI responses into structured learning content instead of simple chatbot replies, helping students understand concepts more effectively.
+## Features
 
----
+### Existing Learning Assistant
 
-## 🚀 Features
+* AI-powered concept explanations
+* Academic question answering
+* Text summarization
+* Quiz generation
+* Personalized learning-path recommendations
+* Web interface built with HTML, CSS, and JavaScript
 
-### 📚 AI Concept Explanation
-- Explains complex topics in a simple and student-friendly way.
-- Helps learners understand concepts step-by-step.
+### Agent Mesh MVP
 
-### ❓ AI Question & Answer
-- Provides answers to academic and general knowledge questions.
-- Uses Gemini AI for intelligent responses.
+* **Study-note retrieval:** Search saved educational notes in SQLite.
+* **Quiz generation:** Generate multiple-choice questions using Gemini.
+* **Progress retrieval:** Retrieve a user's saved learning scores.
+* **Tool-using AI agent:** LangGraph agent connects to MCP tools.
+* **FastAPI integration:** Exposes the agent through `POST /agent`.
+* **Tool-call logging:** Records tool name, execution time, success status, and errors in SQLite.
 
-### 📝 Quiz Generation
-- Automatically creates multiple-choice questions from provided content.
-- Helps students test their understanding.
+## Tech Stack
 
-### 📄 Smart Summarization
-- Converts lengthy content into concise summaries.
-- Useful for quick revision and study preparation.
+| Component                 | Technology               |
+| ------------------------- | ------------------------ |
+| Frontend                  | HTML, CSS, JavaScript    |
+| API                       | FastAPI                  |
+| Agent orchestration       | LangGraph                |
+| Tool protocol/server      | FastMCP                  |
+| Language model            | Google Gemini API        |
+| Database                  | SQLite                   |
+| MCP client                | `langchain-mcp-adapters` |
+| Environment configuration | `python-dotenv`          |
 
-### 🎯 Personalized Learning Path
-- Suggests learning directions based on topics.
-- Helps students follow a structured learning approach.
+## Project Structure
 
-### 🎨 Interactive User Interface
-- Modern AI response cards.
-- Smooth animations and transitions.
-- Clean and responsive design.
-- Copy and clear output functionalities.
-
----
-
-# 🛠️ Tech Stack
-
-## Frontend
-- HTML5
-- CSS3
-- JavaScript
-
-## Backend
-- Python
-- FastAPI
-
-## Artificial Intelligence
-- Google Gemini API
-
-## Development Tools
-- VS Code
-- Git
-- Python Virtual Environment
-
----
-
-# 📂 Project Structure
-
-```
+```text
 Edu-Genie/
-│
 ├── main.py
 ├── gemini_config.py
+├── explanation_module.py
+├── qna.py
+├── summary_module.py
+├── quiz_module.py
+├── learning_path.py
 ├── requirements.txt
-│
-├── templates/
-│   └── index.html
-│
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   │
-│   └── js/
-│       └── script.js
-│
-├── .env
 ├── README.md
-└── LICENSE
+├── agent/
+│   ├── __init__.py
+│   └── graph.py
+├── mcp_server/
+│   ├── __init__.py
+│   ├── server.py
+│   └── http_server.py
+├── db/
+│   ├── __init__.py
+│   └── database.py
+├── tests/
+│   ├── __init__.py
+│   └── seed_notes.py
+├── templates/
+├── static/
+├── .env
+└── edu_genie.db
 ```
 
----
+The database file is created locally. Do not commit `.env` or a database containing private user data.
 
-# ⚙️ Installation & Setup
+## Setup
 
-## 1. Clone the Repository
+### 1. Create and activate an environment
 
-```bash
-git clone https://github.com/yourusername/Edu-Genie.git
+Use your preferred Python environment manager. For Conda:
+
+```powershell
+conda create -n edugenie python=3.11 -y
+conda activate edugenie
 ```
 
-## 2. Navigate into Project Folder
+If you already have a working `edugenie` environment, you do not need to recreate it.
 
-```bash
-cd Edu-Genie
+### 2. Install dependencies
+
+```powershell
+python -m pip install -r requirements.txt
 ```
 
-## 3. Install Dependencies
+Check for dependency conflicts:
 
-```bash
-pip install -r requirements.txt
+```powershell
+python -m pip check
 ```
 
-## 4. Configure Gemini API
+### 3. Configure Gemini
 
-Create a `.env` file:
+Create a `.env` file in the project root:
 
+```text
+GEMINI_API_KEY=your_gemini_api_key
 ```
-GEMINI_API_KEY=your_api_key_here
+
+Replace the placeholder with your own key. Never commit the actual API key to source control.
+
+### 4. Initialize and seed sample notes
+
+Initialize the database using the project's database setup functions, then run:
+
+```powershell
+python -m tests.seed_notes
 ```
 
-Replace `your_api_key_here` with your Google Gemini API key.
+This adds sample educational notes for testing retrieval.
 
-## 5. Run the Application
+## Run the Application
 
-```bash
+Open two terminals in the project root and activate the same environment in each.
+
+**Terminal 1 — Start the MCP HTTP server**
+
+```powershell
+python -m mcp_server.http_server
+```
+
+The MCP server listens at:
+
+```text
+http://127.0.0.1:8001/mcp
+```
+
+**Terminal 2 — Start the FastAPI application**
+
+```powershell
 uvicorn main:app --reload
 ```
 
-Open:
+Open the existing web application at:
 
-```
+```text
 http://127.0.0.1:8000
 ```
 
----
+FastAPI's interactive API documentation is available at:
 
-# 🧠 How Edu-Genie Works
+```text
+http://127.0.0.1:8000/docs
+```
 
-1. User enters a topic, question, or content.
-2. FastAPI processes the request.
-3. Gemini AI generates the response.
-4. The response is formatted into a learning-friendly interface.
-5. User receives explanations, quizzes, summaries, or learning guidance.
+## Test the Agent Endpoint
 
----
+With both servers running, execute:
 
-# 🔮 Future Enhancements
+```powershell
+python -c "from fastapi.testclient import TestClient; from main import app; c=TestClient(app); r=c.post('/agent', data={'message':'Explain Python functions using my saved study notes.'}); print('Status:', r.status_code); print(r.json())"
+```
 
-Planned improvements:
+A successful request returns HTTP `200` and a JSON response containing the original message and the agent's answer.
 
-- User authentication system
-- Registration and login
-- User dashboard
-- Admin dashboard
-- Database integration
-- Learning history tracking
-- Progress analytics
-- PDF/document upload support
-- Voice-based learning assistant
+### Available MCP tools
 
----
+| Tool                | Purpose                                      |
+| ------------------- | -------------------------------------------- |
+| `retrieve_notes`    | Search saved notes by keywords               |
+| `generate_quiz`     | Generate validated multiple-choice questions |
+| `get_user_progress` | Retrieve learning records for a user         |
 
-# 📜 License
+Tool execution records are stored in the SQLite `tool_logs` table.
 
-This project is licensed under the MIT License.
+## How the Agent Mesh Works
 
----
+1. A user sends a message to the FastAPI `/agent` endpoint.
+2. The LangGraph agent interprets the request.
+3. The agent selects an available MCP tool when needed.
+4. The MCP client communicates with the FastMCP server.
+5. The tool accesses saved notes, learning progress, or Gemini quiz generation.
+6. The agent uses the tool result to formulate its final response.
+7. Tool execution details are logged in SQLite.
 
-# 👨‍💻 Author
+## Security Notes
+
+* Store API keys in `.env` and exclude the file from Git.
+* Do not expose the local MCP server publicly without appropriate authentication and access controls.
+* Add authentication and authorization before exposing user-specific learning records to multiple users.
+* Avoid logging sensitive user data or API keys.
+
+## Roadmap
+
+Potential future improvements include document ingestion and retrieval-augmented generation (RAG), source-grounded tutoring, persistent conversational memory, automated integration tests, and user authentication.
+
+## License
+
+This project is licensed under the MIT License, subject to the terms of the repository's `LICENSE` file.
+
+## Author
 
 **Ishak Baba Shaik**
-**Roll No : 23MH1A05D0**
-**Email: skishakog@gamil.com**
-
----
-
-## ⭐ Project Status
-
-🚧 Active Development
-
-Edu-Genie is continuously improving with new AI-powered learning features.
-## Demo video of project 
-google drive link - https://drive.google.com/file/d/1pOZ9qYBmV2lRoCzpdbSQWq35v0LgeU4p/view?usp=sharing
