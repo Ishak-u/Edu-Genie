@@ -1,3 +1,4 @@
+from agent.graph import run_agent
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -96,3 +97,22 @@ def learning_path(topic: str = Form(...)):
         "topic": topic,
         "learning_path": recommendation
     }
+
+# -------------------------
+# Agent Mesh Endpoint
+# -------------------------
+@app.post("/agent")
+async def agent_endpoint(message: str = Form(...)):
+    if not message.strip():
+        return {"error": "Message cannot be empty."}
+
+    try:
+        response = await run_agent(message)
+        return {
+            "message": message,
+            "response": response,
+        }
+    except Exception as exc:
+        # Keep internal exception details out of API responses.
+        print(f"Agent endpoint error: {exc}")
+        return {"error": "The agent could not process your request."}
